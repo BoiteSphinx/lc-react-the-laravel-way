@@ -20,7 +20,7 @@ export default function App({ puppies }: { puppies: Puppy[] }) {
 
         <ul className="flex gap-4 flex-wrap">
           {puppies.map(puppy => (
-            <li className="bg-white p-6 ring ring-black/10 flex gap-2">
+            <li key={puppy.id} className="bg-white p-6 ring ring-black/10 flex gap-2">
               <img
                 src={puppy.image_url}
                 alt={puppy.name}
