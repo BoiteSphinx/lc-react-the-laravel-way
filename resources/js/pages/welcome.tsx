@@ -12,11 +12,25 @@ import { LoaderCircle } from "lucide-react";
 import { getPuppies } from "@/queries";
 import { ErrorBoundary } from "react-error-boundary";
 
-export default function App() {
+export default function App({ puppies }: { puppies: Puppy[] }) {
   return (
     <PageWrapper>
       <Container>
         <Header />
+
+        <ul className="flex gap-4 flex-wrap">
+          {puppies.map(puppy => (
+            <li className="bg-white p-6 ring ring-black/10 flex gap-2">
+              <img
+                src={puppy.image_url}
+                alt={puppy.name}
+                className="size-24 object-cover"
+              />
+              <h2>{puppy.name}</h2>
+            </li>
+          ))}
+        </ul>
+
         <ErrorBoundary fallbackRender={({ error }) => (
           <div className="mt-12 bg-red-100 p-6 shadow ring ring-black/5">
             <p className="text-red-500">{error.message}: {error.details}</p>

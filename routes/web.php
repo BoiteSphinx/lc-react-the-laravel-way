@@ -1,10 +1,13 @@
 <?php
 
+use App\Models\Puppy;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return Inertia::render('welcome', [
+        'puppies' => Puppy::all()->load(['user']),
+    ]);
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
