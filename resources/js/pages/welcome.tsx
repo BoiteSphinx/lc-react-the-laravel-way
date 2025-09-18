@@ -1,4 +1,4 @@
-import { Suspense, use, useEffect, useState } from "react";
+import { useState } from "react";
 import { Container } from "@/components/Container";
 import { Header } from "@/components/Header";
 import { NewPuppyForm } from "@/components/NewPuppyForm";
@@ -8,59 +8,21 @@ import { Search } from "@/components/Search";
 import { ShortList } from "@/components/ShortList";
 
 import { Puppy } from "@/types";
-import { LoaderCircle } from "lucide-react";
-import { getPuppies } from "@/queries";
-import { ErrorBoundary } from "react-error-boundary";
 
 export default function App({ puppies }: { puppies: Puppy[] }) {
   return (
     <PageWrapper>
       <Container>
         <Header />
-
-        <ul className="mt-4 flex gap-4 flex-wrap">
-          {puppies.map(puppy => (
-            <li key={puppy.id} className="bg-white p-6 ring ring-black/10 flex gap-2">
-              <img
-                src={puppy.imageUrl}
-                alt={puppy.name}
-                className="size-24 object-cover"
-              />
-              <div>
-                <h2>{puppy.name}</h2>
-                <p>Owned By {puppy.user.name}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        <ErrorBoundary fallbackRender={({ error }) => (
-          <div className="mt-12 bg-red-100 p-6 shadow ring ring-black/5">
-            <p className="text-red-500">{error.message}: {error.details}</p>
-          </div>
-        )}>
-          <Suspense
-            fallback={
-              <div className="mt-12 grid h-48 place-items-center">
-                <LoaderCircle className="animate-spin stroke-slate-300" />
-              </div>
-            }
-          >
-            <Main />
-          </Suspense>
-
-        </ErrorBoundary>
+        <Main pups={puppies} />
       </Container>
     </PageWrapper>
   );
 }
 
-const puppyPromise = getPuppies()
-
-function Main() {
-  const apiPuppies = use(puppyPromise)
+function Main({ pups }: { pups: Puppy[] }) {
   const [searchQuery, setSearchQuery] = useState<string>("")
-  const [puppies, setPuppies] = useState<Puppy[]>(apiPuppies)
+  const [puppies, setPuppies] = useState<Puppy[]>(pups)
 
   return (
     <main>
