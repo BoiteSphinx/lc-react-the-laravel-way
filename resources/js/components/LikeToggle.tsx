@@ -1,7 +1,5 @@
 import { Heart, LoaderCircle } from "lucide-react";
-import { useState } from "react";
 import { Puppy, SharedData } from "../types";
-import { toggleLikedStatus } from "../queries";
 import { Link, usePage } from "@inertiajs/react";
 import { like } from '@/routes/puppies'
 import clsx from "clsx";
@@ -9,7 +7,6 @@ import clsx from "clsx";
 export function LikeToggle({ puppy }: {
   puppy: Puppy;
 }) {
-  const [pending, setPending] = useState(false)
   const { auth } = usePage<SharedData>().props
 
   return (
@@ -20,17 +17,15 @@ export function LikeToggle({ puppy }: {
       disabled={!auth.user}
       preserveScroll
     >
-      {pending ? (
-        <LoaderCircle className="animate-spin stroke-slate-300" />
-      ) : (
+        <LoaderCircle className="hidden animate-spin stroke-slate-300 group-data-loading:block" />
         <Heart
-          className={
+          className={clsx(
             auth.user && puppy.likedBy.includes(auth.user.id)
             ? 'fill-pink-500 stroke-none'
-            : 'stroke-slate-200 group-hover:stroke-slate-300'
-          }
+            : 'stroke-slate-200 group-hover:stroke-slate-300',
+            'group-data-loading:hidden'
+          )}
         />
-      )}
     </Link>
   )
 }
