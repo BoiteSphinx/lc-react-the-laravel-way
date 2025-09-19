@@ -14,7 +14,7 @@ class LikeController extends Controller
      */
     public function __invoke(Request $request, Puppy $puppy): RedirectResponse
     {
-        sleep(2);
+        sleep(1);
 
         $puppy->likedBy()->toggle($request->user()->id);
 

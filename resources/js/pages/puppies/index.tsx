@@ -32,7 +32,7 @@ function Main({ inertiaPuppies }: { inertiaPuppies: Puppy[] }) {
         <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         {auth.user && (
-          <ShortList puppies={inertiaPuppies} setPuppies={setPuppies} />
+          <ShortList puppies={inertiaPuppies} />
         )}
       </div>
       <PuppiesList searchQuery={searchQuery} puppies={inertiaPuppies} />
