@@ -49,3 +49,8 @@ export interface Puppy {
   likedBy: User['id'][];
   user: Pick<User, 'id' | 'name'>
 }
+
+export interface Filters {
+  search?: string;
+  [key: string]: unknown; // This allows for additional properties...
+}
