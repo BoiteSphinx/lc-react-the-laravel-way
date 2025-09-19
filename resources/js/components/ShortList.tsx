@@ -1,9 +1,12 @@
 import { Heart, LoaderCircle, X } from "lucide-react";
-import { Puppy } from "../types";
+import { Puppy, SharedData } from "../types";
 import { toggleLikedStatus } from "../queries";
 import { Dispatch, SetStateAction, useState } from "react";
+import { usePage } from "@inertiajs/react";
 
 export function ShortList({ puppies, setPuppies }: { puppies: Puppy[]; setPuppies: Dispatch<SetStateAction<Puppy[]>>;}) {
+  const { auth } = usePage<SharedData>().props
+
   return (
     <div>
       <h2 className="flex items-center gap-2 font-medium">
@@ -12,7 +15,7 @@ export function ShortList({ puppies, setPuppies }: { puppies: Puppy[]; setPuppie
       </h2>
       <ul className="mt-4 flex flex-wrap gap-4">
         {puppies
-        .filter(pup => pup.likedBy.includes(1))
+        .filter(pup => pup.likedBy.includes(auth.user?.id))
         .map((puppy) => (
           <li key={puppy.id} className="relative flex items-center overflow-clip rounded-md bg-white shadow-sm ring ring-black/5 transition duration-100 starting:scale-0 starting:opacity-0">
             <img

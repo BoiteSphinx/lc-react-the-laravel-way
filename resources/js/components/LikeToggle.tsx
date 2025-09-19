@@ -1,35 +1,36 @@
 import { Heart, LoaderCircle } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Puppy } from "../types";
+import { useState } from "react";
+import { Puppy, SharedData } from "../types";
 import { toggleLikedStatus } from "../queries";
+import { Link, usePage } from "@inertiajs/react";
+import { like } from '@/routes/puppies'
+import clsx from "clsx";
 
-export function LikeToggle({ puppy, setPuppies }: {
+export function LikeToggle({ puppy }: {
   puppy: Puppy;
-  setPuppies: Dispatch<SetStateAction<Puppy[]>>;
 }) {
   const [pending, setPending] = useState(false)
+  const { auth } = usePage<SharedData>().props
 
   return (
-    <button className="group" onClick={async () => {
-      setPending(true)
-      const updatedPuppy = await toggleLikedStatus(puppy.id)
-      setPuppies((prevPups) => {
-        return prevPups.map((existingPuppy) =>
-          existingPuppy.id === updatedPuppy.id ? updatedPuppy : existingPuppy)
-      })
-      setPending(false)
-    }}>
+    <Link
+      method="patch"
+      href={like(puppy.id)}
+      className={clsx('group', !auth.user && 'cursor-not-allowed')}
+      disabled={!auth.user}
+      preserveScroll
+    >
       {pending ? (
         <LoaderCircle className="animate-spin stroke-slate-300" />
       ) : (
         <Heart
           className={
-            puppy.likedBy.includes(1)
+            auth.user && puppy.likedBy.includes(auth.user.id)
             ? 'fill-pink-500 stroke-none'
             : 'stroke-slate-200 group-hover:stroke-slate-300'
           }
         />
       )}
-    </button>
+    </Link>
   )
 }

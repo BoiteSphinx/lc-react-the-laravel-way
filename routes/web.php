@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Puppy\LikeController;
 use App\Http\Resources\PuppyResource;
 use App\Models\Puppy;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::patch('puppies/{puppy}/liked', LikeController::class)
+        ->name('puppies.like');
+
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');

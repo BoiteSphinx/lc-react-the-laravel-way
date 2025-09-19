@@ -15,15 +15,15 @@ export default function App({ puppies }: { puppies: Puppy[] }) {
     <PageWrapper>
       <Container>
         <Header />
-        <Main pups={puppies} />
+        <Main inertiaPuppies={puppies} />
       </Container>
     </PageWrapper>
   );
 }
 
-function Main({ pups }: { pups: Puppy[] }) {
+function Main({ inertiaPuppies }: { inertiaPuppies: Puppy[] }) {
   const [searchQuery, setSearchQuery] = useState<string>("")
-  const [puppies, setPuppies] = useState<Puppy[]>(pups)
+  const [puppies, setPuppies] = useState<Puppy[]>(inertiaPuppies)
   const { auth } = usePage<SharedData>().props
 
   return (
@@ -32,12 +32,12 @@ function Main({ pups }: { pups: Puppy[] }) {
         <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         {auth.user && (
-          <ShortList puppies={puppies} setPuppies={setPuppies} />
+          <ShortList puppies={inertiaPuppies} setPuppies={setPuppies} />
         )}
       </div>
-      <PuppiesList searchQuery={searchQuery} puppies={puppies} setPuppies={setPuppies} />
+      <PuppiesList searchQuery={searchQuery} puppies={inertiaPuppies} />
 
-      <NewPuppyForm puppies={puppies} setPuppies={setPuppies} />
+      <NewPuppyForm puppies={inertiaPuppies} setPuppies={setPuppies} />
 
     </main>
   );
