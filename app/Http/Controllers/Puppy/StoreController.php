@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Puppy;
 
 use App\Http\Controllers\Controller;
+use App\Models\Puppy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,6 +32,12 @@ class StoreController extends Controller
             $imageUrl = Storage::url($path);
         }
 
-        dd($imageUrl);
+        $puppy = $request->user()->puppies()->create([
+            'name' => $request->get('name'),
+            'trait' => $request->get('trait'),
+            'image_url' => $imageUrl,
+        ]);
+
+        return back()->with('success', 'Puppy created successfully!');
     }
 }

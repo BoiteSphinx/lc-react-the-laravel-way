@@ -26,6 +26,7 @@ class IndexController extends Controller
                             ->orWhere('trait', 'like', "%{$search}%");
                     }))
                     ->with(['user', 'likedBy'])
+                    ->latest()
                     ->paginate(9)
                     ->withQueryString()
             ),

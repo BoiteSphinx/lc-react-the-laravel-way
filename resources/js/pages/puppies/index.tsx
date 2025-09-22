@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Container } from "@/components/Container";
 import { Header } from "@/components/Header";
 import { NewPuppyForm } from "@/components/NewPuppyForm";
@@ -22,11 +22,11 @@ export default function App({ puppies, filters }: { puppies: PaginatedResponse<P
 }
 
 function Main({ paginatedPuppies, filters }: { paginatedPuppies: PaginatedResponse<Puppy>, filters: Filters }) {
-  const [puppies, setPuppies] = useState<Puppy[]>(paginatedPuppies.data)
   const { auth } = usePage<SharedData>().props
+  const mainRef = useRef<HTMLElement>(null)
 
   return (
-    <main>
+    <main ref={mainRef} className="scroll-mt-6">
       <div className="mt-24 grid gap-8 sm:grid-cols-2">
         <Search filters={filters} />
 
@@ -37,7 +37,7 @@ function Main({ paginatedPuppies, filters }: { paginatedPuppies: PaginatedRespon
       <PuppiesList puppies={paginatedPuppies} />
 
       {auth.user && (
-        <NewPuppyForm />)
+        <NewPuppyForm mainRef={mainRef} />)
       }
 
     </main>

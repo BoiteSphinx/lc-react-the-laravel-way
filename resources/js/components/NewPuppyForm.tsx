@@ -1,23 +1,33 @@
 import { useFormStatus } from "react-dom";
 import { Form, useForm } from "@inertiajs/react";
 import { store } from "@/routes/puppies";
+import { useRef } from "react";
 
-export function NewPuppyForm() {
-  const { setData, data } = useForm({
+export function NewPuppyForm({ mainRef }: { mainRef: React.RefObject<HTMLElement> }) {
+  const { setData, data, reset } = useForm({
     name: '',
     trait: '',
     image: null as File | null,
   })
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className="mt-12 flex items-center justify-between bg-white p-8 shadow ring ring-black/5">
         <Form
           method="post"
-
           action={store()}
           className="mt-4 flex w-full flex-col items-start gap-4"
           options={{
             preserveScroll: true,
+          }}
+          onSuccess={() => {
+            reset()
+            if (fileInputRef.current) {
+              fileInputRef.current.value = ''
+            }
+            if (mainRef.current) {
+              mainRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
           }}
         >
           {({ errors }) => (
@@ -26,7 +36,6 @@ export function NewPuppyForm() {
                 <fieldset className="flex w-full flex-col gap-1">
                   <label htmlFor="name">Name</label>
                   <input
-                    // required
                     value={data.name}
                     className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                     id="name"
@@ -39,7 +48,6 @@ export function NewPuppyForm() {
                 <fieldset className="flex w-full flex-col gap-1">
                   <label htmlFor="trait">Personality trait</label>
                   <input
-                    // required
                     value={data.trait}
                     className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                     id="trait"
@@ -54,11 +62,11 @@ export function NewPuppyForm() {
                 >
                   <label htmlFor="image">Profile pic</label>
                   <input
+                    ref={fileInputRef}
                     className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                     id="image"
                     type="file"
                     name="image"
-                    // required
                     onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
                   />
                   {errors.image && (<p className="text-xs mt-1 text-red-500">{errors.image}</p>)}
