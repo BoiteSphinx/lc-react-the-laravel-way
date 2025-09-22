@@ -36,7 +36,9 @@ function Main({ paginatedPuppies, filters }: { paginatedPuppies: PaginatedRespon
       </div>
       <PuppiesList puppies={paginatedPuppies} />
 
-      <NewPuppyForm puppies={paginatedPuppies.data} setPuppies={setPuppies} />
+      {auth.user && (
+        <NewPuppyForm />)
+      }
 
     </main>
   );

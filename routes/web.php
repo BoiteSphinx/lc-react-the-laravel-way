@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Puppy\{IndexController, LikeController};
+use App\Http\Controllers\Puppy\{IndexController, LikeController, StoreController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', IndexController::class)->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('puppies', StoreController::class)
+        ->name('puppies.store');
     Route::patch('puppies/{puppy}/liked', LikeController::class)
         ->name('puppies.like');
 
