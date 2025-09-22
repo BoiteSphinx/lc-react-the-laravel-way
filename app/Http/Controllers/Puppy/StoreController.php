@@ -14,6 +14,7 @@ class StoreController extends Controller
      */
     public function __invoke(Request $request)
     {
+        sleep(2);
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'trait' => ['required', 'string', 'max:255'],
