@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Puppy;
 
+use App\Actions\OptimizeImageToWebp;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,20 +26,12 @@ class StoreController extends Controller
         $imageUrl = null;
 
         if ($request->hasFile('image')) {
-            // Image optimization
-            $image = Image::read($request->file('image'));
-            // Scale down only
-            if ($image->width() > 1000) {
-                $image->scale(width: 1000);
-            }
-
             // Encode to Webp
-            $webpEncoded = $image->toWebp(quality: 95)->toString();
+            $result = (new OptimizeImageToWebp())->handle($request->file('image'));
 
-            $fileName = Str::random() . '.webp';
-            $path = "puppies/{$fileName}";
+            $path = "puppies/{$result['filename']}";
 
-            $stored = Storage::disk('public')->put($path, $webpEncoded);
+            $stored = Storage::disk('public')->put($path, $result['webp_string']);
 
             if (!$stored) {
                 return back()->withErrors(['image' => 'Failed to upload image.']);
