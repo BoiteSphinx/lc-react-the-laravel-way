@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Puppy;
 
 use App\Http\Controllers\Controller;
-use App\Models\Puppy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Laravel\Facades\Image;
 
 class StoreController extends Controller
 {
@@ -24,16 +25,29 @@ class StoreController extends Controller
         $imageUrl = null;
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('puppies', 'public');
+            // Image optimization
+            $image = Image::read($request->file('image'));
+            // Scale down only
+            if ($image->width() > 1000) {
+                $image->scale(width: 1000);
+            }
 
-            if (!$path) {
+            // Encode to Webp
+            $webpEncoded = $image->toWebp(quality: 95)->toString();
+
+            $fileName = Str::random() . '.webp';
+            $path = "puppies/{$fileName}";
+
+            $stored = Storage::disk('public')->put($path, $webpEncoded);
+
+            if (!$stored) {
                 return back()->withErrors(['image' => 'Failed to upload image.']);
             }
 
             $imageUrl = Storage::url($path);
         }
 
-        $puppy = $request->user()->puppies()->create([
+        $request->user()->puppies()->create([
             'name' => $request->get('name'),
             'trait' => $request->get('trait'),
             'image_url' => $imageUrl,
