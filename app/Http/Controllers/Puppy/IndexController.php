@@ -30,6 +30,9 @@ class IndexController extends Controller
                     ->paginate(9)
                     ->withQueryString()
             ),
+            'likedPuppies' => $request->user() ?
+                PuppyResource::collection($request->user()->likedPuppies)
+                : [],
             'filters' => [
                 'search' => $search
             ]
