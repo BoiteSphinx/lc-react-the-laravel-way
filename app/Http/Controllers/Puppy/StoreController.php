@@ -47,6 +47,6 @@ class StoreController extends Controller
             'image_url' => $imageUrl,
         ]);
 
-        return back()->with('success', 'Puppy created successfully!');
+        return redirect()->to(route('home', ['page' => 1]))->with('success', 'Puppy created successfully!');
     }
 }
