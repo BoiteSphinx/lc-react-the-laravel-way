@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Puppy\{IndexController, LikeController, StoreController};
+use App\Http\Controllers\Puppy\{DeleteController, IndexController, LikeController, StoreController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -11,6 +11,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('puppies.store');
     Route::patch('puppies/{puppy}/liked', LikeController::class)
         ->name('puppies.like');
+    Route::delete('puppies/{puppy}', DeleteController::class)
+        ->name('puppies.delete');
 
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
