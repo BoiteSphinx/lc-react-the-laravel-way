@@ -33,7 +33,7 @@ function PuppyCard({ puppy }: PuppyCardProps) {
   return (
     <li key={puppy.id} className="relative overflow-clip rounded-lg bg-white shadow-md ring ring-black/5 hover:-translate-y-0.5">
       <div className="absolute top-2 right-2">
-        <PuppyDelete puppy={puppy} />
+        {puppy.can.delete && (<PuppyDelete puppy={puppy} />)}
       </div>
       <img
         className="aspect-square object-cover"
