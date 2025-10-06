@@ -14,8 +14,6 @@ class DeleteController extends Controller
      */
     public function __invoke(Request $request, Puppy $puppy)
     {
-        sleep(2);
-
         $imagePath = str($puppy->image_url)->replace('/storage/', '')->value();
 
         if ($request->user()->cannot('delete', $puppy)) {

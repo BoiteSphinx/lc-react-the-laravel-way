@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { ImageUploadPreview } from "./ImageUploadPreview";
 
 export function PuppyUpdate({ puppy }: { puppy: Puppy, }) {
   const { data, setData, errors, post, processing } = useForm({
@@ -40,40 +41,49 @@ export function PuppyUpdate({ puppy }: { puppy: Puppy, }) {
             })
           }}
         >
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            className="mt-1 block w-full"
-            value={data.name}
-            onChange={(e) => setData('name', e.target.value)}
-            required
-            autoComplete="name"
-            placeholder="Full name"
-          />
-          {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+          <fieldset>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              className="mt-1 block w-full"
+              value={data.name}
+              onChange={(e) => setData('name', e.target.value)}
+              required
+              autoComplete="name"
+              placeholder="Full name"
+            />
+            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
 
-          <Label htmlFor="trait">Personality trait</Label>
-          <Input
-            id="trait"
-            className="mt-1 block w-full"
-            value={data.trait}
-            onChange={(e) => setData('trait', e.target.value)}
-            required
-            placeholder="Personality trait"
-          />
+          </fieldset>
 
-          {errors.trait && <p className="mt-1 text-xs text-red-500">{errors.trait}</p>}
+          <fieldset>
+            <Label htmlFor="trait">Personality trait</Label>
+            <Input
+              id="trait"
+              className="mt-1 block w-full"
+              value={data.trait}
+              onChange={(e) => setData('trait', e.target.value)}
+              required
+              placeholder="Personality trait"
+            />
 
-          <Label htmlFor="image">Change image</Label>
-          <Input
-            id="image"
-            type="file"
-            className="mt-1 block w-full"
-            onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
-            placeholder="Profile picture"
-          />
+            {errors.trait && <p className="mt-1 text-xs text-red-500">{errors.trait}</p>}
+          </fieldset>
 
-          {errors.image && <p className="mt-1 text-xs text-red-500">{errors.image}</p>}
+          <fieldset>
+            <Label htmlFor="image">Change image</Label>
+            <Input
+              id="image"
+              type="file"
+              className="mt-1 block w-full"
+              onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
+              placeholder="Profile picture"
+            />
+
+            {errors.image && <p className="mt-1 text-xs text-red-500">{errors.image}</p>}
+
+            <ImageUploadPreview source={data.image ?? puppy.imageUrl} />
+          </fieldset>
 
           <DialogFooter className="gap-2">
             <DialogClose asChild>
